@@ -35,7 +35,10 @@ def test_pizza_drinks_handler():
 
     def send_message(chat_id: int, text: str, **kwargs) -> dict:
         assert chat_id == 12345
-        assert "🍕 **Your Order Summary:**\n\n**Pizza:** Pepperoni\n**Size:** Medium\n**Drink:** Coca-Cola\n\nIs everything correct?" in text
+        assert (
+            "🍕 **Your Order Summary:**\n\n**Pizza:** Pepperoni\n**Size:** Medium\n**Drink:** Coca-Cola\n\nIs everything correct?"
+            in text
+        )
         assert "Coca-Cola" in text
         send_message_calls.append({"text": text, "kwargs": kwargs})
         return {"ok": True}
