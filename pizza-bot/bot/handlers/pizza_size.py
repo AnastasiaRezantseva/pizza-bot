@@ -4,6 +4,7 @@ from bot.handlers.handler import Handler, HandlerStatus
 from bot.keyboards.order_keyboards import drinks_keyboard
 from bot.domain.order_state import OrderState
 
+
 class PizzaSizeHandler(Handler):
     def can_handle(
         self,
@@ -42,7 +43,7 @@ class PizzaSizeHandler(Handler):
 
         pizza_size = size_mapping.get(callback_data)
         order_json["pizza_size"] = pizza_size
-        storage.update_user_order_json(telegram_id, order_json)
+        storage.update_user_order(telegram_id, order_json)
         storage.update_user_state(telegram_id, OrderState.WAIT_FOR_DRINKS)
 
         messenger.answer_callback_query(update["callback_query"]["id"])

@@ -3,6 +3,7 @@ from bot.domain.storage import Storage
 from bot.handlers.handler import Handler, HandlerStatus
 from bot.domain.order_state import OrderState
 
+
 class UpdateDatabaseLogger(Handler):
     def can_handle(
         self,
@@ -22,5 +23,5 @@ class UpdateDatabaseLogger(Handler):
         storage: Storage,
         messenger: Messenger,
     ) -> HandlerStatus:
-        storage.persist_update(update)
+        storage.persist_updates(update)
         return HandlerStatus.CONTINUE

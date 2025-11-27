@@ -4,6 +4,7 @@ from bot.handlers.handler import Handler, HandlerStatus
 from bot.keyboards.order_keyboards import size_keyboard
 from bot.domain.order_state import OrderState
 
+
 class PizzaSelectionHandler(Handler):
     def can_handle(
         self,
