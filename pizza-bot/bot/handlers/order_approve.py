@@ -2,13 +2,13 @@ from bot.domain.messenger import Messenger
 from bot.domain.storage import Storage
 from bot.handlers.handler import Handler, HandlerStatus
 from bot.keyboards.order_keyboards import pizza_keyboard
-
+from bot.domain.order_state import OrderState
 
 class OrderApprovalHandler(Handler):
     def can_handle(
         self,
         update: dict,
-        state: str,
+        state: OrderState,
         order_json: dict,
         storage: Storage,
         messenger: Messenger,
@@ -16,7 +16,7 @@ class OrderApprovalHandler(Handler):
         if "callback_query" not in update:
             return False
 
-        if state != "WAIT_FOR_ORDER_APPROVE":
+        if state != OrderState.WAIT_FOR_ORDER_APPROVE:
             return False
 
         callback_data = update["callback_query"]["data"]
@@ -40,7 +40,7 @@ class OrderApprovalHandler(Handler):
         )
 
         if callback_data == "order_approve":
-            storage.update_user_state(telegram_id, "ORDER_FINISHED")
+            storage.update_user_state(telegram_id, OrderState.ORDER_FINISHED)
 
             pizza_name = order_json.get("pizza_name", "Unknown")
             pizza_size = order_json.get("pizza_size", "Unknown")
@@ -63,9 +63,9 @@ Send /start to place another order."""
             )
 
         elif callback_data == "order_restart":
-            storage.clear_user_order_json(telegram_id)
+            storage.clear_user_state_order(telegram_id)
 
-            storage.update_user_state(telegram_id, "WAIT_FOR_PIZZA_NAME")
+            storage.update_user_state(telegram_id, OrderState.WAIT_FOR_PIZZA_NAME)
 
             messenger.send_message(
                 chat_id=update["callback_query"]["message"]["chat"]["id"],
