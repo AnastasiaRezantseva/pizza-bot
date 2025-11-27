@@ -26,11 +26,11 @@ def test_update_database_logger_execution():
         },
     }
 
-    persist_update_called = False
+    persist_updates_called = False
 
-    def persist_update(update: dict) -> None:
-        nonlocal persist_update_called
-        persist_update_called = True
+    def persist_updates(update: dict) -> None:
+        nonlocal persist_updates_called
+        persist_updates_called = True
         assert update == test_update
 
     def get_user(telegram_id: int) -> dict | None:
@@ -39,7 +39,7 @@ def test_update_database_logger_execution():
 
     mock_storage = Mock(
         {
-            "persist_update": persist_update,
+            "persist_updates": persist_updates,
             "get_user": get_user,
         }
     )
@@ -50,4 +50,4 @@ def test_update_database_logger_execution():
     dispatcher.add_handlers(update_logger)
     dispatcher.dispatch(test_update)
 
-    assert persist_update_called
+    assert persist_updates_called

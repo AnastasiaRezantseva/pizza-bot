@@ -29,7 +29,7 @@ def test_message_start_handler():
     clear_user_data_called = False
     update_user_state_called = False
 
-    def clear_user_order_json(telegram_id: int) -> None:
+    def clear_user_state_order(telegram_id: int) -> None:
         assert telegram_id == 12345
 
         nonlocal clear_user_data_called
@@ -55,7 +55,7 @@ def test_message_start_handler():
 
     mock_storage = Mock(
         {
-            "clear_user_order_json": clear_user_order_json,
+            "clear_user_state_order": clear_user_state_order,
             "update_user_state": update_user_state,
             "get_user": get_user,
         }

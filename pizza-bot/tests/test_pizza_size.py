@@ -21,7 +21,7 @@ def test_pizza_size_handler():
     update_user_state_called = False
     send_message_calls = []
 
-    def update_user_order_json(telegram_id: int, data: dict) -> None:
+    def update_user_order(telegram_id: int, data: dict) -> None:
         assert telegram_id == 12345
         assert data["pizza_size"] == "Medium (30cm)"
         nonlocal update_user_order_json_called
@@ -48,7 +48,7 @@ def test_pizza_size_handler():
 
     mock_storage = Mock(
         {
-            "update_user_order_json": update_user_order_json,
+            "update_user_order": update_user_order,
             "update_user_state": update_user_state,
         }
     )

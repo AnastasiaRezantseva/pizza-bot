@@ -99,7 +99,7 @@ def test_order_approve_handler_restart():
         nonlocal update_user_state_called
         update_user_state_called = True
 
-    def clear_user_order_json(telegram_id: int) -> None:
+    def clear_user_state_order(telegram_id: int) -> None:
         assert telegram_id == 12345
         nonlocal clear_user_order_json_called
         clear_user_order_json_called = True
@@ -121,7 +121,7 @@ def test_order_approve_handler_restart():
     mock_storage = Mock(
         {
             "update_user_state": update_user_state,
-            "clear_user_order_json": clear_user_order_json,
+            "clear_user_state_order": clear_user_state_order,
             "get_user": lambda tid: {
                 "state": "WAIT_FOR_ORDER_APPROVE",
                 "order_json": '{"pizza_name": "Pepperoni", "pizza_size": "Medium", "drink": "Coca-Cola"}',
