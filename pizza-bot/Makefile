@@ -8,19 +8,15 @@ $(VENV_DIR):
 
 install: $(VENV_DIR)
 
-# Run black formatter
 black: $(VENV_DIR)
 	$(ACTIVATE_VENV) && black .
 
-# Run ruff linter
 ruff: $(VENV_DIR)
 	$(ACTIVATE_VENV) && ruff check .
 
-# Run pytest
 pytest: $(VENV_DIR)
 	$(ACTIVATE_VENV) && PYTHONPATH=. pytest
 
-# Run all tests (includes black, ruff, and pytest)
 test: black ruff pytest
 
 
@@ -67,6 +63,7 @@ build:
 	  -f Dockerfile \
 	  --load \
 	  .
+
 push:
 	docker push $(BOT_IMAGE)
 
@@ -87,3 +84,20 @@ run: docker_net
 stop:
 	docker stop $(BOT_CONTAINER)
 	docker rm $(BOT_CONTAINER)
+
+logs:
+	docker logs -f $(BOT_CONTAINER)
+
+logs-postgres:
+	docker logs -f $(POSTGRES_CONTAINER)
+
+logs-tail:
+	docker logs --tail 50 $(BOT_CONTAINER)
+
+logs-timestamps:
+	docker logs -t $(BOT_CONTAINER)
+
+restart: stop run logs
+
+status:
+	docker ps -a

@@ -1,10 +1,11 @@
+import pytest
 from bot.dispatcher import Dispatcher
 from bot.handlers.database_handler import UpdateDatabaseLogger
-
 from tests.mocks import Mock
 
 
-def test_update_database_logger_execution():
+@pytest.mark.asyncio
+async def test_update_database_logger_execution():
     test_update = {
         "update_id": 123456789,
         "message": {
@@ -27,20 +28,27 @@ def test_update_database_logger_execution():
     }
 
     persist_updates_called = False
+    ensure_user_exists_called = False
 
-    def persist_updates(update: dict) -> None:
+    async def persist_updates(update: dict) -> None:
         nonlocal persist_updates_called
         persist_updates_called = True
         assert update == test_update
 
-    def get_user(telegram_id: int) -> dict | None:
+    async def get_user(telegram_id: int) -> dict | None:
         assert telegram_id == 12345
         return None
+
+    async def ensure_user_exists(telegram_id: int) -> None:
+        assert telegram_id == 12345
+        nonlocal ensure_user_exists_called
+        ensure_user_exists_called = True
 
     mock_storage = Mock(
         {
             "persist_updates": persist_updates,
             "get_user": get_user,
+            "ensure_user_exists": ensure_user_exists,
         }
     )
     mock_messenger = Mock({})
@@ -48,6 +56,7 @@ def test_update_database_logger_execution():
     dispatcher = Dispatcher(mock_storage, mock_messenger)
     update_logger = UpdateDatabaseLogger()
     dispatcher.add_handlers(update_logger)
-    dispatcher.dispatch(test_update)
+    await dispatcher.dispatch(test_update)
 
     assert persist_updates_called
+    assert ensure_user_exists_called

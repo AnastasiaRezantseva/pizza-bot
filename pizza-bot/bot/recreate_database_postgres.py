@@ -1,3 +1,10 @@
+import asyncio
 from bot.infrastructure.storage_postgres import StoragePostgres
 
-StoragePostgres().recreate_database()
+
+async def main():
+    await StoragePostgres().recreate_database()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

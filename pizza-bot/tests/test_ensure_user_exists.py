@@ -1,9 +1,12 @@
+import pytest
+
 from bot.dispatcher import Dispatcher
 from bot.handlers.ensure_user_exists import EnsureUserExists
 from tests.mocks import Mock
 
 
-def test_ensure_user_exists_handler():
+@pytest.mark.asyncio
+async def test_ensure_user_exists_handler():
     test_update = {
         "update_id": 123456789,
         "message": {
@@ -21,12 +24,12 @@ def test_ensure_user_exists_handler():
 
     ensure_user_exists_called = False
 
-    def ensure_user_exists(telegram_id: int) -> None:
+    async def ensure_user_exists(telegram_id: int) -> None:
         assert telegram_id == 12345
         nonlocal ensure_user_exists_called
         ensure_user_exists_called = True
 
-    def get_user(telegram_id: int) -> dict | None:
+    async def get_user(telegram_id: int) -> dict | None:
         assert telegram_id == 12345
         return None
 
@@ -41,6 +44,6 @@ def test_ensure_user_exists_handler():
     dispatcher = Dispatcher(mock_storage, mock_messenger)
     dispatcher.add_handlers(EnsureUserExists())
 
-    dispatcher.dispatch(test_update)
+    await dispatcher.dispatch(test_update)
 
     assert ensure_user_exists_called
