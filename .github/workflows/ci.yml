@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, master, python-async ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main, master, python-async ]
 
 jobs:
   code-quality:
@@ -26,7 +26,6 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ~/.cache/pip
-        # hashFiles считается от корня репозитория, поэтому тут путь с pizza-bot/
         key: ${{ runner.os }}-pip-${{ hashFiles('pizza-bot/requirements.txt') }}
         restore-keys: |
           ${{ runner.os }}-pip-
