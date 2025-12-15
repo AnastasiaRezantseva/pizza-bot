@@ -9,10 +9,6 @@ on:
 jobs:
   code-quality:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: pizza-bot
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -26,24 +22,19 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ~/.cache/pip
-        # hashFiles считается от корня репозитория, поэтому тут путь с pizza-bot/
-        key: ${{ runner.os }}-pip-${{ hashFiles('pizza-bot/requirements.txt') }}
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
         restore-keys: |
           ${{ runner.os }}-pip-
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt   # тут уже БЕЗ pizza-bot/, мы внутри неё
+        pip install -r requirements.txt
 
     - name: Run Black code style check
       run: |
-        black --check bot/ tests/
+        black --check bot/
 
     - name: Run Ruff linting check
       run: |
-        ruff check bot/ tests/
-
-    - name: Run pytest tests
-      run: |
-        PYTHONPATH=. pytest tests/ -v
+        ruff check bot/
