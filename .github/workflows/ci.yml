@@ -33,8 +33,8 @@ jobs:
 
     - name: Run Black code style check
       run: |
-        black --check bot/
+        black --check echo-bot/
 
     - name: Run Ruff linting check
       run: |
-        ruff check bot/
+        ruff check echo-bot/
