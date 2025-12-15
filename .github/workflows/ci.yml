@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, master, 12-aiogram ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main, master, 12-aiogram ]
 
 jobs:
   code-quality:
